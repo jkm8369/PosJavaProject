@@ -173,47 +173,8 @@ public class PaymentDAO {
 		return orderList;
 	}
 
-	// 시간대별 통계
-	public List<PaymentVO> salesByHour(String salesDate) {
-		List<PaymentVO> salesList = new ArrayList<PaymentVO>();
-
-		this.connect();
-
-		try {
-
-			String query = "";
-			query += " select date_format(o.order_time, '%Y-%m-%d %H:00:00') as order_time, ";
-			query += " 		  count(*) as order_count, ";
-			query += " 		  sum(m.menu_price*o.quantity) as sales ";
-			query += " from orders o, menu m ";
-			query += " where o.menu_id = m.menu_id ";
-			query += " and date(o.order_time) = ? ";
-			query += " group by date_format(o.order_time, '%Y-%m-%d %H:00:00') ";
-			query += " order by order_time asc ";
-
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, salesDate);
-
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				String orderTime = rs.getString("order_time");
-				int orderCount = rs.getInt("order_count");
-				int sales = rs.getInt("sales");
-
-				PaymentVO paymentVO = new PaymentVO(orderTime, orderCount, sales);
-				
-				salesList.add(paymentVO);
-			}
-
-		} catch (SQLException e) {
-
-		}
-
-		this.close();
-		
-		return salesList;
-	}
+	
+	
 
 
 
